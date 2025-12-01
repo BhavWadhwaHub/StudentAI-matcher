@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student AI Matcher - Find Your Study Partners</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen active">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="logo-circle">
+                        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h1 class="hero-title">Neura Linker AI</h1>
+                    <p class="hero-subtitle">Connect with like-minded students through our intelligent AI matching system</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">📝</div>
+                            <h3>Complete Your Profile</h3>
+                            <p>Fill out your academic interests, personality, and preferences</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🤖</div>
+                            <h3>AI-Powered Matching</h3>
+                            <p>Our advanced algorithm finds compatible study partners</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📧</div>
+                            <h3>Get Matched</h3>
+                            <p>Receive your matches via email with detailed compatibility</p>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary btn-large" onclick="showForm()">
+                        Get Started
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Screen -->
+        <div id="form-screen" class="screen">
+            <div class="form-container">
+                <div class="form-header">
+                    <button class="back-btn" onclick="showWelcome()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <div class="form-header-content">
+                        <h2 class="form-title">Student Profile</h2>
+                        <p class="form-subtitle">Help us understand you better to find perfect study partners</p>
+                    </div>
+                </div>
+
+                <form id="student-form" class="form-content">
+                    <!-- Error Message -->
+                    <div id="error-message" class="error-box" style="display: none;"></div>
+
+                    <!-- Basic Information -->
+                    <div class="form-section">
+                        <h3 class="section-title">Basic Information</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Full Name *</label>
+                            <input type="text" id="name" class="form-input" required 
+                                   placeholder="Enter your full name">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email Address *</label>
+                            <input type="email" id="email" class="form-input" required 
+                                   placeholder="your.email@university.edu">
+                        </div>
+                    </div>
+
+                    <!-- Academic Background -->
+                    <div class="form-section">
+                        <h3 class="section-title">Academic Background</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Academic Major *</label>
+                            <select id="major" class="form-input" required>
+                                <option value="">Select your major</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Year of Study *</label>
+                            <div class="option-grid" id="year-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Language & Location -->
+                    <div class="form-section">
+                        <h3 class="section-title">Language & Location</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Primary Language *</label>
+                            <select id="language" class="form-input" required></select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Country/Region *</label>
+                            <select id="country" class="form-input" required></select>
+                        </div>
+                    </div>
+
+                    <!-- Personality & Study Style -->
+                    <div class="form-section">
+                        <h3 class="section-title">Personality & Preferences</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Personality Type *</label>
+                            <div class="option-grid" id="personality-container"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Preferred Study Style *</label>
+                            <div class="option-grid" id="study-style-container"></div>
+                        </div>
+                    </div>
+
+                    <!-- Interests (Multi-select) -->
+                    <div class="form-section">
+                        <h3 class="section-title">Cuisines You Enjoy</h3>
+                        <p class="section-hint">Select all that apply</p>
+                        <div class="multi-select-grid" id="cuisine-container"></div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Hobbies & Interests</h3>
+                        <p class="section-hint">Select all that apply</p>
+                        <div class="multi-select-grid" id="interests-container"></div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">Movie Genres</h3>
+                        <p class="section-hint">Select all that apply</p>
+                        <div class="multi-select-grid" id="movies-container"></div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-footer">
+                        <button type="submit" class="btn-primary btn-large btn-submit" id="submit-btn">
+                            Find My Study Partners
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Processing Screen -->
+        <div id="processing-screen" class="screen">
+            <div class="processing-container">
+                <div class="spinner"></div>
+                <h2 class="processing-title">Finding Your Perfect Matches</h2>
+                <p class="processing-text">Our AI is analyzing your profile...</p>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <div class="results-container">
+                <!-- Success Animation -->
+                <div class="success-animation-wrapper">
+                    <div class="success-icon-wrapper">
+                        <div class="success-checkmark">
+                            <svg class="checkmark-svg" viewBox="0 0 52 52">
+                                <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                                <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                            </svg>
+                        </div>
+                        <div class="success-particles">
+                            <span class="particle particle-1">✨</span>
+                            <span class="particle particle-2">⭐</span>
+                            <span class="particle particle-3">💫</span>
+                            <span class="particle particle-4">✨</span>
+                            <span class="particle particle-5">⭐</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <div class="success-message">
+                    <h2 class="results-title" id="results-title">🎉 Success!</h2>
+                    <p class="results-subtitle" id="results-subtitle">
+                        Your profile has been saved successfully!
+                    </p>
+                </div>
+
+                <!-- Match Count Badge -->
+                <div class="match-badge-wrapper" id="match-badge-wrapper" style="display: none;">
+                    <div class="match-badge">
+                        <span class="match-count-large" id="match-count-large">0</span>
+                        <span class="match-label">Perfect Match<span id="match-plural">es</span> Found!</span>
+                    </div>
+                </div>
+
+                <!-- Email Card -->
+                <div class="email-card">
+                    <div class="email-card-header">
+                        <div class="email-icon-wrapper">
+                            <svg class="email-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="email-card-title">Check Your Email!</h3>
+                        <p class="email-card-subtitle">We've sent your matches to:</p>
+                    </div>
+                    <div class="email-address-box">
+                        <span class="email-icon-small">📧</span>
+                        <span class="email-address" id="student-email"></span>
+                    </div>
+                    <div class="email-status-badge">
+                        <span class="status-icon">✓</span>
+                        <span class="status-text">Email sent successfully</span>
+                    </div>
+                </div>
+
+                <!-- What's in Email Section -->
+                <div class="email-content-card">
+                    <h4 class="content-card-title">📬 What's in Your Email?</h4>
+                    <div class="email-features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">🎯</div>
+                            <div class="feature-text">
+                                <strong>Your Best Matches</strong>
+                                <p>Top study partners with compatibility scores</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">💡</div>
+                            <div class="feature-text">
+                                <strong>Why You Match</strong>
+                                <p>Personalized explanations of your compatibility</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">📞</div>
+                            <div class="feature-text">
+                                <strong>Contact Info</strong>
+                                <p>Email addresses to reach your study partners</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🤝</div>
+                            <div class="feature-text">
+                                <strong>Shared Interests</strong>
+                                <p>Commonalities and connection points</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="email-tip">
+                        <span class="tip-icon">💡</span>
+                        <p>Don't see the email? Check your spam folder or wait a few moments for delivery.</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="results-footer">
+                    <button class="btn-primary-large" onclick="resetApp()">
+                        <span>Add Another Student</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                    </button>
+                    <button class="btn-secondary-large" onclick="showWelcome()">
+                        <span>Back to Home</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

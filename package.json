@@ -1,0 +1,23 @@
+{
+  "name": "studentmatcher",
+  "version": "1.0.0",
+  "description": "AI Student Matcher backend with Google Sheets + Flask integration",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "Bhav Wadhwa, Mohammed Mujtaba Fatah, Madina Alizada, Anelya Shaimardanova",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "csv-parse": "^6.1.0",
+    "csv-stringify": "^6.6.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "googleapis": "^161.0.0",
+    "node-fetch": "^3.3.2",
+    "nodemailer": "^7.0.10"
+  }
+}
