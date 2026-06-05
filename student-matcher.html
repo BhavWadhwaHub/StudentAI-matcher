@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neura Linker AI — Student Matcher</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Background layers -->
+<canvas id="neural-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
+<div class="orb-field">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="orb o3"></div>
+    <div class="orb o4"></div>
+    <div class="orb o5"></div>
+    <div class="orb o6"></div>
+</div>
+<div class="grid-overlay"></div>
+
+<div class="scene" id="scene">
+
+<!-- ═══════════════════ WELCOME SCREEN ═══════════════════ -->
+<div class="screen active" id="welcome-screen">
+    <div class="hero-wrap">
+        <div class="hero-content">
+
+            <!-- Floating decorative badges -->
+            <div class="float-badges" aria-hidden="true">
+                <div class="float-badge fb-1">🧠 K-Means AI</div>
+                <div class="float-badge fb-2">⚡ Instant</div>
+                <div class="float-badge fb-3">🎯 9 Factors</div>
+                <div class="float-badge fb-4">🆓 Free</div>
+            </div>
+
+            <!-- Orbital logo -->
+            <div class="logo-rig">
+                <div class="ring r1"></div>
+                <div class="ring r2"></div>
+                <div class="ring r3"></div>
+                <div class="ring r4"></div>
+                <div class="ring-planet p1"></div>
+                <div class="ring-planet p2"></div>
+                <div class="ring-planet p3"></div>
+                <div class="logo-nucleus">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="28" height="28">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="pill-badge">
+                <span class="pulse-dot"></span>
+                AI-Powered Matching Engine
+            </div>
+
+            <div class="hero-title-wrap">
+                <h1 class="hero-title">
+                    <span class="line-plain">Find Your</span>
+                    <span class="line-grad">Academic Soulmate</span>
+                </h1>
+                <p class="hero-typewriter-wrap">
+                    Connect with your <span class="hero-typewriter"></span><span class="cursor-blink">|</span>
+                </p>
+            </div>
+
+            <p class="hero-sub">Our AI analyses 9 compatibility dimensions using K-Means clustering to find the students you'll genuinely connect with — not just who happens to be nearby.</p>
+
+            <!-- Feature cards -->
+            <div class="feat-grid">
+                <div class="feat-card glow-card" data-tilt>
+                    <div class="feat-emoji">✍️</div>
+                    <h3>Build Your Vibe</h3>
+                    <p>Share your academic background and personality in 2 minutes</p>
+                </div>
+                <div class="feat-card glow-card" data-tilt>
+                    <div class="feat-emoji">🤖</div>
+                    <h3>AI Does the Work</h3>
+                    <p>Smart algorithms crunch 9 compatibility factors instantly</p>
+                </div>
+                <div class="feat-card glow-card" data-tilt>
+                    <div class="feat-emoji">🎉</div>
+                    <h3>Meet Your People</h3>
+                    <p>Get a detailed match report delivered straight to your inbox</p>
+                </div>
+            </div>
+
+            <button class="btn-primary btn-glow ripple" onclick="navigateTo('form-screen','forward')">
+                <span>Start Matching 🚀</span>
+                <div class="btn-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
+            </button>
+
+            <div class="stats-pill glow-card">
+                <div class="stat">
+                    <span class="stat-n">K-Means</span>
+                    <span class="stat-l">Clustering</span>
+                </div>
+                <div class="stat-sep"></div>
+                <div class="stat">
+                    <span class="stat-n">9</span>
+                    <span class="stat-l">Match Factors</span>
+                </div>
+                <div class="stat-sep"></div>
+                <div class="stat">
+                    <span class="stat-n">100%</span>
+                    <span class="stat-l">Free</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ FORM SCREEN ═══════════════════ -->
+<div class="screen" id="form-screen">
+    <div class="form-page">
+
+        <div class="topbar glass-topbar">
+            <button class="back-btn ripple" onclick="navigateTo('welcome-screen','back')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back
+            </button>
+            <div class="topbar-brand">
+                <div class="brand-dot"></div>
+                Neura Linker
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="progress-pct" id="progress-pct">0%</span>
+            </div>
+        </div>
+
+        <div class="form-body">
+
+            <div class="form-header glow-card">
+                <div class="fh-emoji">🌟</div>
+                <div>
+                    <h2 class="fh-title">Build Your Profile</h2>
+                    <p class="fh-sub">Tell us who you are and we'll find your people</p>
+                </div>
+            </div>
+
+            <form id="student-form" novalidate>
+                <div id="error-banner" class="error-banner" style="display:none" role="alert"></div>
+
+                <!-- Who are you -->
+                <div class="form-section glow-card" data-color="purple" id="sec-basic">
+                    <div class="sec-head">
+                        <div class="sec-emoji">👋</div>
+                        <h3 class="sec-title">Who Are You?</h3>
+                        <div class="sec-check" id="check-basic"></div>
+                    </div>
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label">Full Name <span class="req">*</span></label>
+                            <input type="text" id="name" class="f-input" placeholder="Your full name" autocomplete="name">
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label">Email Address <span class="req">*</span></label>
+                            <input type="email" id="email" class="f-input" placeholder="you@university.edu" autocomplete="email">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic life -->
+                <div class="form-section glow-card" data-color="pink" id="sec-academic">
+                    <div class="sec-head">
+                        <div class="sec-emoji">🧠</div>
+                        <h3 class="sec-title">Your Academic Life</h3>
+                        <div class="sec-check" id="check-academic"></div>
+                    </div>
+                    <div class="f-group">
+                        <label class="f-label">Academic Major <span class="req">*</span></label>
+                        <div class="sel-wrap">
+                            <select id="major" class="f-input f-select">
+                                <option value="">Choose your major</option>
+                            </select>
+                            <svg class="sel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                                <path d="M6 9l6 6 6-6"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="f-group" style="margin-top:1.1rem">
+                        <label class="f-label">Year of Study <span class="req">*</span></label>
+                        <div class="chip-grid" id="year-container"></div>
+                    </div>
+                </div>
+
+                <!-- Where from -->
+                <div class="form-section glow-card" data-color="teal" id="sec-location">
+                    <div class="sec-head">
+                        <div class="sec-emoji">🌍</div>
+                        <h3 class="sec-title">Where Are You From?</h3>
+                        <div class="sec-check" id="check-location"></div>
+                    </div>
+                    <div class="f-row">
+                        <div class="f-group">
+                            <label class="f-label">Primary Language <span class="req">*</span></label>
+                            <div class="sel-wrap">
+                                <select id="language" class="f-input f-select">
+                                    <option value="">Select language</option>
+                                </select>
+                                <svg class="sel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="f-group">
+                            <label class="f-label">Country / Region <span class="req">*</span></label>
+                            <div class="sel-wrap">
+                                <select id="country" class="f-input f-select">
+                                    <option value="">Select country</option>
+                                </select>
+                                <svg class="sel-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vibe check -->
+                <div class="form-section glow-card" data-color="orange" id="sec-personality">
+                    <div class="sec-head">
+                        <div class="sec-emoji">✨</div>
+                        <h3 class="sec-title">Your Vibe Check</h3>
+                        <div class="sec-check" id="check-personality"></div>
+                    </div>
+                    <div class="f-group">
+                        <label class="f-label">Personality Type <span class="req">*</span></label>
+                        <div class="chip-grid" id="personality-container"></div>
+                    </div>
+                    <div class="f-group" style="margin-top:1.25rem">
+                        <label class="f-label">Preferred Study Style <span class="req">*</span></label>
+                        <div class="chip-grid" id="study-style-container"></div>
+                    </div>
+                </div>
+
+                <!-- Cuisines -->
+                <div class="form-section glow-card" data-color="green">
+                    <div class="sec-head">
+                        <div class="sec-emoji">🍜</div>
+                        <h3 class="sec-title">Food You Love</h3>
+                        <span class="sec-hint">Pick all that apply</span>
+                    </div>
+                    <div class="tag-grid" id="cuisine-container"></div>
+                </div>
+
+                <!-- Interests -->
+                <div class="form-section glow-card" data-color="amber">
+                    <div class="sec-head">
+                        <div class="sec-emoji">🎯</div>
+                        <h3 class="sec-title">Hobbies &amp; Interests</h3>
+                        <span class="sec-hint">Pick all that apply</span>
+                    </div>
+                    <div class="tag-grid" id="interests-container"></div>
+                </div>
+
+                <!-- Movies -->
+                <div class="form-section glow-card" data-color="blue">
+                    <div class="sec-head">
+                        <div class="sec-emoji">🎬</div>
+                        <h3 class="sec-title">Movie Genres</h3>
+                        <span class="sec-hint">Pick all that apply</span>
+                    </div>
+                    <div class="tag-grid" id="movies-container"></div>
+                </div>
+
+                <div class="form-foot">
+                    <button type="submit" class="btn-primary btn-glow btn-full ripple" id="submit-btn">
+                        <span>Find My Match ✨</span>
+                        <div class="btn-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ PROCESSING SCREEN ═══════════════════ -->
+<div class="screen" id="processing-screen">
+    <div class="proc-wrap">
+
+        <div class="proc-orb">
+            <div class="proc-orb-outer"></div>
+            <div class="po-ring pr1"></div>
+            <div class="po-ring pr2"></div>
+            <div class="po-ring pr3"></div>
+            <div class="po-core">
+                <span class="proc-emoji">🔭</span>
+            </div>
+        </div>
+
+        <h2 class="proc-title">Scanning the Universe…</h2>
+        <p class="proc-sub" id="proc-fun-fact">Our AI is analysing your profile across 9 dimensions</p>
+
+        <div class="step-list">
+            <div class="step-row" id="step-1">
+                <div class="step-dot"></div>
+                <span>Saving your profile securely 🔒</span>
+                <div class="step-tick">✓</div>
+            </div>
+            <div class="step-row" id="step-2">
+                <div class="step-dot"></div>
+                <span>Running K-Means clustering 🤖</span>
+                <div class="step-tick">✓</div>
+            </div>
+            <div class="step-row" id="step-3">
+                <div class="step-dot"></div>
+                <span>Computing compatibility scores 🎯</span>
+                <div class="step-tick">✓</div>
+            </div>
+            <div class="step-row" id="step-4">
+                <div class="step-dot"></div>
+                <span>Sending results to your inbox 📬</span>
+                <div class="step-tick">✓</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ═══════════════════ RESULTS SCREEN ═══════════════════ -->
+<div class="screen" id="results-screen">
+    <div class="results-wrap">
+        <div class="results-card">
+
+            <div class="burst">
+                <div class="b-ring b-r1"></div>
+                <div class="b-ring b-r2"></div>
+                <div class="b-ring b-r3"></div>
+                <div class="b-core">
+                    <svg class="check-svg" viewBox="0 0 52 52">
+                        <circle class="check-circle" cx="26" cy="26" r="24" fill="none"/>
+                        <path class="check-path" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="res-title-wrap">
+                <h2 class="res-title" id="res-title">You're All Set! 🎉</h2>
+                <p class="res-sub" id="res-sub">Your profile has been saved successfully!</p>
+            </div>
+
+            <div id="match-badge" class="match-badge glow-card" style="display:none">
+                <div class="mb-num-wrap">
+                    <span class="mb-num" id="mb-num">0</span>
+                </div>
+                <div class="mb-labels">
+                    <span class="mb-label">Perfect Match<span id="mb-plural">es</span> Found! 🌟</span>
+                    <div class="mb-stars">★★★★★</div>
+                </div>
+            </div>
+
+            <div class="email-card glow-card">
+                <div class="email-icon-wrap">📬</div>
+                <div class="email-body">
+                    <h3>Check Your Inbox!</h3>
+                    <p>Your matches have been sent to</p>
+                    <div class="email-chip" id="student-email"></div>
+                </div>
+                <div class="sent-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" width="11" height="11">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Sent!
+                </div>
+            </div>
+
+            <div class="res-grid">
+                <div class="res-feat glow-card" data-tilt>
+                    <div class="rf-ico">🎯</div>
+                    <strong>Top Matches</strong>
+                    <p>Compatibility scores included</p>
+                </div>
+                <div class="res-feat glow-card" data-tilt>
+                    <div class="rf-ico">💡</div>
+                    <strong>Why You Match</strong>
+                    <p>Personalised explanations</p>
+                </div>
+                <div class="res-feat glow-card" data-tilt>
+                    <div class="rf-ico">📞</div>
+                    <strong>Contact Info</strong>
+                    <p>Reach your partners directly</p>
+                </div>
+                <div class="res-feat glow-card" data-tilt>
+                    <div class="rf-ico">🤝</div>
+                    <strong>Shared Interests</strong>
+                    <p>Common connection points</p>
+                </div>
+            </div>
+
+            <p class="spam-note">📮 Don't see the email? Check your spam folder or wait a moment.</p>
+
+            <div class="res-actions">
+                <button class="btn-primary btn-glow ripple" onclick="resetApp()">
+                    <span>Add Another Student</span>
+                    <div class="btn-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="15" height="15">
+                            <path d="M12 5v14M5 12h14"/>
+                        </svg>
+                    </div>
+                </button>
+                <button class="btn-ghost ripple" onclick="navigateTo('welcome-screen','back')">← Back to Home</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</div><!-- /scene -->
+
+<script src="script.js"></script>
+</body>
+</html>
